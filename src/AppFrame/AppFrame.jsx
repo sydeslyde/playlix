@@ -67,6 +67,11 @@ function AppFrame(props) {
           <Grid container direction='row' justify='space-evenly'>
             <Grid item>
               <Typography variant='caption'>
+                Version {process.env.npm_package_version}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant='caption'>
                 Created in 2019 by sydeslyde
               </Typography>
             </Grid>
