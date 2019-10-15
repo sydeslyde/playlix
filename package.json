@@ -1,13 +1,16 @@
 {
   "name": "playlix",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A small web application to export your Spotify playlists",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --out-dir ./dist/ --open",
     "build": "parcel build index.html --no-source-maps --out-dir ./dist/",
     "clean": "del /S /Q dist && FOR /D %p IN (\"dist\\*\") DO rmdir /S /Q \"%p\"",
-    "prebuild": "npm run clean"
+    "prebuild": "npm run clean",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -m \"Deploy %npm_package_version% to gh-pages\" -d ./dist/",
+    "postversion": "npm run deploy"
   },
   "repository": {
     "type": "git",
