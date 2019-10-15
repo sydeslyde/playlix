@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Switch, Route, useParams } from 'react-router-dom';
 
-import PlaylistTable from './PlaylistTable';
+//import PlaylistTable from './PlaylistTable';
 import Playlist from './Playlist';
 import AppFrame from './AppFrame/AppFrame';
 import Home from './Home';
@@ -21,7 +21,7 @@ const theme = createMuiTheme({
 function PlaylistPage() {
   const { playlistId } = useParams();
   return <Playlist playlistId={playlistId} />
-  return <PlaylistTable playlistId={playlistId} />
+  //return <PlaylistTable playlistId={playlistId} />
 }
 
 export default function App() {

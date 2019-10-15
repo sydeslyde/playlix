@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,7 +14,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import SaveIcon from '@material-ui/icons/Save';
-import localDownloadString from './utils/download';
+import playlistToFile from './utils/playlistToFile';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import durationFormatter from './utils/durationFormatter';
 import { fetchPlaylistTracks } from './state/actions';
@@ -58,13 +59,13 @@ const useToolbarStyles = makeStyles(theme => ({
 
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
-  const { loading, canSave, playlistName, trackCount } = props;
+  const { loading, canSave, playlistData, trackCount } = props;
 
   return (
     <Toolbar className={classes.root}>
       <div className={classes.title}>
         <Typography variant='h6' id='tableTitle'>
-          Playlist '{playlistName}'
+          Playlist '{playlistData.name}'
         </Typography>
         <Typography color='inherit' variant='subtitle1'>
           {trackCount} Tracks
@@ -81,7 +82,7 @@ const EnhancedTableToolbar = props => {
             <div>
               <IconButton
                 aria-label='Save list'
-                onClick={e => localDownloadString('hello world', playlistName+'.csv')}
+                onClick={e => playlistToFile(playlistData)}
                 disabled={!canSave}>
                 <SaveIcon />
               </IconButton>
@@ -93,9 +94,9 @@ const EnhancedTableToolbar = props => {
   );
 };
 
-function PlaylistTable(props) {
+function Playlist(props) {
   const classes = useStyles();
-  const { playlistId, playlistExists, tracks, loading, playlistName, trackCount, requestFetchPlaylistTracks } = props;
+  const { playlistId, playlistExists, tracks, loading, playlistData, trackCount, requestFetchPlaylistTracks } = props;
 
   React.useEffect(() => {
     if (playlistExists && loading == null) {
@@ -106,6 +107,7 @@ function PlaylistTable(props) {
   if(!playlistExists) {
     return <Paper className={classes.root}>
       Playlist with id {playlistId} not found!
+      <Redirect to='/' />
     </Paper>
   }
 
@@ -113,8 +115,8 @@ function PlaylistTable(props) {
     <Paper className={classes.root}>
       <EnhancedTableToolbar
         loading={loading}
-        canSave={loading === true}
-        playlistName={playlistName}
+        canSave={loading === false}
+        playlistData={playlistData}
         trackCount={trackCount}
       />
       <List className={classes.list}>
@@ -150,10 +152,11 @@ function PlaylistTable(props) {
 const playlistExists = (state, ownProps) => Object.keys(state.playlists).indexOf(ownProps.playlistId) >= 0;
 // TODO refactor this, it is ugly....
 const mapStateToProps = (state, ownProps) => ({
+  playlistData: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId] : null,
   playlistExists: playlistExists(state, ownProps),
   playlistName: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId].name : null,
-  trackCount: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId].tracks.length : null,
-  tracks: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId].tracks : null,
+  trackCount: playlistExists(state, ownProps) && state.playlists[ownProps.playlistId].tracks != null ? Object.keys(state.playlists[ownProps.playlistId].tracks).length : '-',
+  tracks: playlistExists(state, ownProps) && state.playlists[ownProps.playlistId].tracks != null ? Object.values(state.playlists[ownProps.playlistId].tracks) : [],
   loading: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId].loading : false
 });
 
@@ -161,4 +164,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   requestFetchPlaylistTracks: () => dispatch(fetchPlaylistTracks(ownProps.playlistId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistTable);
+export default connect(mapStateToProps, mapDispatchToProps)(Playlist);
