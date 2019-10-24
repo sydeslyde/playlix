@@ -3,7 +3,7 @@ import Spotify from 'spotify-web-api-js';
 const authParams = {
   client_id: 'provided by spotify',
   response_type: 'token',
-  redirect_uri: 'http://localhost:1234/loginBack/',
+  redirect_uri: window.location.protocol + '://' + window.location.host + '/#/loginBack/',
   //state: 'optional',
   //scope: 'optional'
 };
