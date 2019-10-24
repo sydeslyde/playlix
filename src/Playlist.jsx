@@ -68,7 +68,7 @@ const EnhancedTableToolbar = props => {
           Playlist '{playlistData.name}'
         </Typography>
         <Typography color='inherit' variant='subtitle1'>
-          {trackCount} Tracks
+          {canSave ? trackCount + ' Tracks' : 'Loading...'}
         </Typography>
       </div>
       <div className={classes.spacer} />
