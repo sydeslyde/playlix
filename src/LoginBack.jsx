@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 import { getLoginCallbackParams } from './state/spotify';
-import { spotifyClient } from './state/spotify';
 import { setAuth, fetchUserPlaylistInfos } from './state/actions';
 
 function LoginBack({ setAuth, startLoadingPlaylists }) {
   const callbackParams = getLoginCallbackParams();
 
   React.useEffect(() => {
-    if (!callbackParams.error) {
+    if (!callbackParams.error && callbackParams.access_token) {
       // set spotify auth callback params to state
       setAuth(callbackParams);
       // ... and start loading playlist data
@@ -18,9 +18,14 @@ function LoginBack({ setAuth, startLoadingPlaylists }) {
   });
 
   if (callbackParams.error)
-    return <div>{callbackParams.error}</div>
+    return <Typography variant='body1' color='error'>
+      An Error occured during Authorization: {callbackParams.error}
+    </Typography>
 
-  return <Redirect to='/' />;
+  if (callbackParams.access_token)
+    return <Redirect to='/' />;
+
+  else return null;
 }
 
 const mapDispatchToProps = (dispatch) => ({

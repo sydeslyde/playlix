@@ -3,7 +3,11 @@ function singlePlaylistReducer(state = { loading: null }, action) {
     case 'SET_PLAYLIST_LOADING':
       return { ...state, loading: action.loading };
     case 'RECEIVE_PLAYLIST_TRACKS':
-      return { ...state, tracks: { ...state.tracks, ...action.tracks }};
+      var newState = { ...state }
+      if (!Array.isArray(state.tracks)) {
+        newState = { ...state, tracks: [] };
+      }
+      return { ...newState, tracks: [ ...newState.tracks, ...action.tracks ]};
     default:
       return state;
   }

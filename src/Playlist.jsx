@@ -57,6 +57,16 @@ const useToolbarStyles = makeStyles(theme => ({
   }
 }));
 
+const smallestCover = (coverArray) => {
+  var smallest = { url: "", height: Number.MAX_SAFE_INTEGER, width: Number.MAX_SAFE_INTEGER };
+  for (const cover of coverArray) {
+    if (cover.width < smallest.width && cover.height < smallest.height) {
+      smallest = cover;
+    }
+  }
+  return smallest;
+}
+
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
   const { loading, canSave, playlistData, trackCount } = props;
@@ -121,26 +131,26 @@ function Playlist(props) {
       />
       <List className={classes.list}>
         {tracks.map(track => (
-          <ListItem alignItems='flex-start' key={track.url}>
+          <ListItem alignItems='flex-start' key={track.uri + track.added_at}>
             <ListItemAvatar>
-              <SamplePlayButton sampleUrl={track.sampleUrl} coverUrl={track.coverUrl} />
+              <SamplePlayButton sampleUrl={track.preview_url} coverUrl={smallestCover(track.album.images).url} />
             </ListItemAvatar>
             <ListItemText
-              primary={track.title}
+              primary={track.name}
               secondary={
                 <React.Fragment>
                   <Typography component='span' variant='body2' className={classes.inline}>
-                    {track.artist}
+                    {track.artists.map(a => a.name).join(', ')}
                   </Typography>
                   {' — '}
                   <Typography component='span' variant='body2' className={classes.inline}>
-                    {track.album}
+                    {track.album.name}
                   </Typography>
                 </React.Fragment>
               }
             />
             <ListItemSecondaryAction>
-              <ListItemText secondary={durationFormatter(track.duration)} />
+              <ListItemText secondary={durationFormatter(track.duration_ms)} />
             </ListItemSecondaryAction>
           </ListItem>
         ))}
@@ -155,8 +165,8 @@ const mapStateToProps = (state, ownProps) => ({
   playlistData: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId] : null,
   playlistExists: playlistExists(state, ownProps),
   playlistName: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId].name : null,
-  trackCount: playlistExists(state, ownProps) && state.playlists[ownProps.playlistId].tracks != null ? Object.keys(state.playlists[ownProps.playlistId].tracks).length : '-',
-  tracks: playlistExists(state, ownProps) && state.playlists[ownProps.playlistId].tracks != null ? Object.values(state.playlists[ownProps.playlistId].tracks) : [],
+  trackCount: playlistExists(state, ownProps) && Array.isArray(state.playlists[ownProps.playlistId].tracks) ? state.playlists[ownProps.playlistId].tracks.length : '-',
+  tracks: playlistExists(state, ownProps) && Array.isArray(state.playlists[ownProps.playlistId].tracks) ? state.playlists[ownProps.playlistId].tracks : [],
   loading: playlistExists(state, ownProps) ? state.playlists[ownProps.playlistId].loading : false
 });
 

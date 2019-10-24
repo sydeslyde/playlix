@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
+import LoginBack from './LoginBack';
 import { requestLogin } from './state/spotify';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +43,7 @@ function Home({ loggedIn }) {
 
       <div className={classes.center}>
         <Button variant='contained' color='primary' onClick={requestLogin}>LOGIN WITH SPOTIFY</Button>
+        <LoginBack />
       </div></div>) : null}
 
       <Typography gutterBottom>

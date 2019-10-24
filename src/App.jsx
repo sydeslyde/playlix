@@ -5,7 +5,6 @@ import { HashRouter as Router, Switch, Route, useParams } from 'react-router-dom
 import Playlist from './Playlist';
 import AppFrame from './AppFrame/AppFrame';
 import Home from './Home';
-import LoginBack from './LoginBack';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
@@ -32,9 +31,6 @@ export default function App() {
           <Switch>
             <Route path='/playlist/:playlistId'>
               <PlaylistPage />
-            </Route>
-            <Route path='/loginBack'>
-              <LoginBack />
             </Route>
             <Route path='/'>
               <Home />

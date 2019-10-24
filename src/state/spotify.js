@@ -1,9 +1,9 @@
 import Spotify from 'spotify-web-api-js';
 
 const authParams = {
-  client_id: 'provided by spotify',
+  client_id: 'd35ceaa27c00452aaff6e5ed681a3a09',
   response_type: 'token',
-  redirect_uri: window.location.protocol + '://' + window.location.host + '/#/loginBack/',
+  redirect_uri: window.location.protocol + '//' + window.location.host + '/#/',
   //state: 'optional',
   //scope: 'optional'
 };
@@ -23,6 +23,7 @@ const getDecodedHashParams = () => {
     hash = hash.substr(1);
   
   return hash.split('&')
+    .map(pair => pair.startsWith('/') ? pair.substr(1) : pair)
     .map(pair => pair.split('='))
     .reduce((acc, curr) => Object.assign(acc, { [curr[0]]: curr[1] }), {});
 }
