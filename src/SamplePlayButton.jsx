@@ -101,6 +101,13 @@ class SamplePlayButton extends React.Component {
   render() {
     const { playing, progress } = this.state;
 
+    // disable rounded covers with play button for now...
+    return (
+      <div className={this.props.classes.root}>
+        <div style={{ backgroundImage: 'url(' + this.props.coverUrl + ')', backgroundSize: 'cover', width: 40, height: 40 }} />
+      </div>
+    );
+
     return (
       <div className={this.props.classes.root}>
         <audio src={this.props.sampleUrl} ref={this.audioRef} />
