@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PlaylistIcon from '@material-ui/icons/QueueMusic';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { uiToggleSmallDrawerOpen, uiSetSmallDrawerOpen } from '../state/actions';
@@ -33,6 +33,9 @@ const useStyles = makeStyles(theme => ({
 function AppDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const match = useRouteMatch({path: "/playlist/:playlistId"});
+  const currentPlaylistId = match != null ? match.params != null ? match.params.playlistId : null : null;
+
   const drawerOpen = props.uiDrawerOpen;
   const closeDrawer = props.closeDrawer;
   const handleDrawerToggle = props.handleDrawerToggle;
@@ -46,7 +49,7 @@ function AppDrawer(props) {
     <List>
       {hasPlaylists ?
         playlists.map(({ name, id }, index) => (
-          <ListItem component={RouterLink} to={`/playlist/${id}`} onClick={closeDrawer} button key={id}>
+          <ListItem component={RouterLink} to={`/playlist/${id}`} onClick={closeDrawer} selected={currentPlaylistId === id} button key={id}>
             <ListItemIcon>
               <PlaylistIcon />
             </ListItemIcon>
