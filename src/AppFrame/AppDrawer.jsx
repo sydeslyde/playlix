@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PlaylistIcon from '@material-ui/icons/QueueMusic';
+import HeartIcon from '@material-ui/icons/Favorite';
 import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 
 import { connect } from 'react-redux';
@@ -51,7 +52,9 @@ function AppDrawer(props) {
         playlists.map(({ name, id }, index) => (
           <ListItem component={RouterLink} to={`/playlist/${id}`} onClick={closeDrawer} selected={currentPlaylistId === id} button key={id}>
             <ListItemIcon>
-              <PlaylistIcon />
+              {id === 'favorites'
+                ? <HeartIcon />
+                : <PlaylistIcon />}
             </ListItemIcon>
             <ListItemText primary={name} />
           </ListItem>

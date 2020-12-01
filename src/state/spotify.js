@@ -4,7 +4,7 @@ const authParams = {
   client_id: 'd35ceaa27c00452aaff6e5ed681a3a09',
   response_type: 'token',
   redirect_uri: window.location.protocol + '//' + window.location.host + (process.env.NODE_ENV === 'development' ? '/#/': '/playlix/#/'),
-  scope: 'playlist-read-private'
+  scope: 'playlist-read-private user-library-read'
   //state: 'optional',
 };
 

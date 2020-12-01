@@ -75,7 +75,9 @@ const EnhancedTableToolbar = props => {
     <Toolbar className={classes.root}>
       <div className={classes.title}>
         <Typography variant='h6' id='tableTitle'>
-          Playlist '{playlistData.name}'
+          {playlistData.id === 'favorites'
+            ? 'Saved Tracks'
+            : 'Playlist \'' + playlistData.name + '\''}
         </Typography>
         <Typography color='inherit' variant='subtitle1'>
           {canSave ? trackCount + ' Tracks' : 'Loading...'}

@@ -53,13 +53,15 @@ const useToolbarStyles = makeStyles(theme => ({
 
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
-  const { loading, canSave, playlistName, trackCount } = props;
+  const { loading, canSave, playlistId, playlistName, trackCount } = props;
 
   return (
     <Toolbar className={classes.root}>
       <div className={classes.title}>
         <Typography variant='h6' id='tableTitle'>
-          Playlist '{playlistName}'
+          {playlistId === 'favorites'
+            ? 'Saved Tracks'
+            : 'Playlist \'' + playlistName + '\''}
         </Typography>
         <Typography color='inherit' variant='subtitle1'>
           {trackCount} Tracks
@@ -108,6 +110,7 @@ function PlaylistTable(props) {
     <Paper className={classes.root}>
       <EnhancedTableToolbar
         loading={loading}
+        playlistId={playlistId}
         playlistName={playlistName}
         trackCount={trackCount}
       />

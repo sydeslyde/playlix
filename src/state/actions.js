@@ -20,10 +20,17 @@ const receivePlaylistInfos = (playlistId, data) => ({
 
 export const fetchPlaylistTracks = (playlistId) => dispatch => {
   // TODO check if playlist is already loaded?
+  const spotifyClientGetPlaylistItemsCall = (playlistId) => {
+    if (playlistId === "favorites")
+      // special api call for saved tracks / favorites
+      return spotifyClient.getMySavedTracks();
+    else
+      return spotifyClient.getPlaylistTracks(playlistId)
+  }
 
   dispatch(setPlaylistLoading(playlistId, true));
 
-  spotifyClient.getPlaylistTracks(playlistId)
+  spotifyClientGetPlaylistItemsCall(playlistId)
     .then(playlistTracksResponse => dispatch(receivePlaylistTracksResponse(playlistId, playlistTracksResponse)))
     .catch(err => {
       console.error('Error while fetching Playlist Tracks for ' + playlistId, err);
@@ -47,6 +54,9 @@ const receivePlaylistTracksResponse = (playlistId, playlistTracksResponse) => di
 };
 
 export const fetchUserPlaylistInfos = () => dispatch => {
+  // special "playlist" for saved/favorite songs
+  dispatch(receivePlaylistInfos("favorites", { id:"favorites", name:"Saved Tracks" }));
+
   spotifyClient.getUserPlaylists()
     .then(playlistResponse => dispatch(receivePlaylistInfosResponse(playlistResponse)))
     .catch(err => console.error('Error while fetching Playlist Infos for user', err));
